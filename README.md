@@ -28,14 +28,16 @@ Or, if you're using Bundler, just add the following to your Gemfile:
 
 Create a active_payment.rb file in config/initializers with your gateway informations
 
-    ```ruby
     ActivePayment.configure do |config|
-      config.paypal_login = ENV["PAYPAL_LOGIN"]
-      config.paypal_password = ENV["PAYPAL_PASSWORD"]
-      config.paypal_signature = ENV["PAYPAL_SIGNATURE"]
-      config.paypal_appid = ENV["PAYPAL_APPID"]
+      config.paypal_login = ENV.fetch("PAYPAL_LOGIN")
+      config.paypal_password = ENV.fetch("PAYPAL_PASSWORD")
+      config.paypal_signature = ENV.fetch("PAYPAL_SIGNATURE")
+      config.paypal_appid = ENV.fetch("PAYPAL_APPID")
     end
-    ```
+
+And add the callbacks route to your config/routes.rb
+
+     mount ActivePayment::Engine => '/payments'
 
 ## Usage
 
