@@ -9,7 +9,9 @@ and Paypal Adaptive Payment.
 ### From Git
 
 You can check out the latest source from git:
-git clone git://github.com/jeremymarc/active_payment.git
+
+    git clone git://github.com/jeremymarc/active_payment.git
+
 
 ### From RubyGems
 
