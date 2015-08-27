@@ -46,6 +46,10 @@ describe ActivePayment::Models::Sales do
     it 'initialize correct value' do
       expect(@sales.sales.count).to eq(@sales.count)
     end
+
+    it 'should allow initialization with no parameters' do
+      expect(ActivePayment::Models::Sales.new.sales).to eq([])
+    end
   end
 
   describe 'amount' do

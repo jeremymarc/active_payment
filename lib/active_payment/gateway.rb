@@ -14,6 +14,9 @@ module ActivePayment
     end
 
     def setup_purchase(sales, ip_address)
+      amount = sales.amount_in_cents
+      raise ActivePayment::InvalidAmountError unless amount >= ActivePayment.configuration.min_amount
+
       url = @gateway.setup_purchase(sales)
       @purchase_token = @gateway.purchase_token
       create_transactions(ip_address)
@@ -42,6 +45,9 @@ module ActivePayment
     end
 
     private
+
+    def total_amount
+    end
 
     def create_transactions(ip_address)
       fail 'You must called setup_purchase before creating a transaction' unless @gateway.sales

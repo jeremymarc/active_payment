@@ -19,23 +19,13 @@ module ActivePayment
         payables = @sales.map(&:payable)
         destination = sales.first.payee.paypal_identifier
 
-        begin
-          amount = total_amount.to_i
-        rescue
-          raise ActivePayment::InvalidAmountError
-        end
-        raise ActivePayment::InvalidAmountError unless amount >= ActivePayment.configuration.min_amount
+        amount = @sales.amount_in_cents.to_i
 
         response = @gateway.setup_purchase(amount, paypal_data(payables, destination))
         raise ActivePayment::InvalidGatewayResponseError unless response.success?
 
         @purchase_token = response.token
         @gateway.redirect_url_for(response.token)
-      end
-
-      def total_amount
-        fail 'You can to call setup_purchases first' unless @sales
-        @sales.amount_in_cents
       end
 
       # return boolean
@@ -49,7 +39,7 @@ module ActivePayment
           amount = params[:amount]
           purchase_response = @gateway.purchase(amount, params.merge(payer_id: response.payer_id))
           fail ActivePayment::InvalidGatewayResponseError unless purchase_response.success?
-        rescue
+        rescue ActivePayment::InvalidGatewayResponseError
           return false
         end
 

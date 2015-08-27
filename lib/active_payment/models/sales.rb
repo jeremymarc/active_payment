@@ -5,7 +5,7 @@ module ActivePayment
 
       attr_accessor :sales
 
-      def initialize(sales)
+      def initialize(sales = [])
         @sales = sales
       end
 

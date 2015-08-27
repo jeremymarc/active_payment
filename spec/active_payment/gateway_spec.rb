@@ -20,7 +20,7 @@ describe ActivePayment::Gateway do
     expect(gateway.gateway).to receive(:setup_purchase).and_return(return_url)
     expect(gateway.gateway).to receive(:purchase_token).and_return(purchase_token)
     allow(gateway.gateway).to receive(:sales).and_return([])
-    gateway.setup_purchase([], ip_address)
+    gateway.setup_purchase(ActivePayment::Models::Sales.new, ip_address)
   end
 
   it 'must create transactions after calling setup_purchase' do
@@ -33,7 +33,7 @@ describe ActivePayment::Gateway do
     allow(gateway.gateway).to receive(:purchase_token).and_return(purchase_token)
     allow(gateway.gateway).to receive(:sales).and_return([])
     expect(gateway).to receive(:create_transactions).with(ip_address)
-    gateway.setup_purchase([], ip_address)
+    gateway.setup_purchase(ActivePayment::Models::Sales.new, ip_address)
   end
 
   it 'raise NoTransactionError when calling verify_purchase with invalid external_id' do
