@@ -19,6 +19,7 @@ module ActivePayment
     def cancel
       transactions_error
       flash[:error] = "Your transaction has been canceled"
+
       redirect_to '/'
     end
 
@@ -31,7 +32,10 @@ module ActivePayment
 
       @transactions.each do |transaction|
         fail SecurityError unless transaction.pending?
-        fail SecurityError unless transaction.ip_address == request.remote_ip
+
+        if ActivePayment.configuration.ip_security
+          fail SecurityError unless transaction.ip_address == request.remote_ip
+        end
       end
     end
 

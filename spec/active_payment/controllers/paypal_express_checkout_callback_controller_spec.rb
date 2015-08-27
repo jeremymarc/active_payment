@@ -31,7 +31,8 @@ RSpec.describe ActivePayment::PaypalExpressCheckoutCallbackController, type: :co
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
-    it 'should raise SecurityError if not same ip address' do
+    it 'should raise SecurityError if not same ip address and ip_security is true' do
+      ActivePayment.configuration.ip_security = true
       expect {
         get :success, token: transaction.external_id
       }.to raise_error(SecurityError)
@@ -76,6 +77,7 @@ RSpec.describe ActivePayment::PaypalExpressCheckoutCallbackController, type: :co
     end
 
     it 'should raise SecurityError if not same ip address' do
+      ActivePayment.configuration.ip_security = true
       expect {
         get :cancel, token: transaction.external_id
       }.to raise_error(SecurityError)

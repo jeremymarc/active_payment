@@ -11,7 +11,16 @@ describe ActivePayment::Configuration do
   end
 
   it 'set the min amount when its not set' do
-    expect(@configuration.min_amount).to eq(100)
+    expect(@configuration.min_amount).to eq(0)
+  end
+
+  it 'set the ip_security to false by default' do
+    expect(@configuration.ip_security).to eq(false)
+  end
+
+  it 'set the ip_security' do
+    @configuration.ip_security = true
+    expect(@configuration.ip_security).to eq(true)
   end
 
   it 'set paypal login' do
