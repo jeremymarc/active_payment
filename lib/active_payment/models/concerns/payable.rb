@@ -23,6 +23,10 @@ module ActivePayment
       def reference
         id
       end
+
+      def description
+        description
+      end
     end
   end
 end

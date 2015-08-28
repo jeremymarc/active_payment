@@ -35,8 +35,6 @@ Create a active_payment.rb file in config/initializers with your gateway informa
       config.paypal_appid = ENV.fetch("PAYPAL_APPID")
       config.ip_security = true
       config.min_amount = 1000
-      config paypal_express_checkout_callback_controller = "active_payment/paypal_express_checkout_callback"
-      config.paypal_adaptive_payment_callback_controller = "active_payment/adaptive_payment_callback"
     end
 
 And add the callbacks route to your config/routes.rb
@@ -86,8 +84,25 @@ And add the callbacks route to your config/routes.rb
   redirect_to url
   ```
 
-  That's it. The engine will take care of the rest: Create a transaction, handle the callback,
-  and update the transaction once the payment is done.
+That's it. The engine will take care of the rest: Create a transaction, handle the callback,
+and update the transaction once the payment is done.
+
+If you want to override the default behavior or the callback controller, simply create
+a app/controllers/active_payment/controller_name.rb:
+
+  ```ruby
+  module ActivePayment
+    class PaypalExpressCheckoutCallbackController < ActionController::Base
+      include ActivePayment::PaypalExpressCheckoutCallback
+      protect_from_forgery with: :null_session
+
+      def success
+        ... do your custom actions
+      end
+    end
+  end
+  ```
+
 
 ## Supported Payment Gateways
 * [PayPal Express Checkout](https://www.paypal.com/webapps/mpp/express-checkout)

@@ -63,6 +63,7 @@ module ActivePayment
           payable_id: sale.payable.id,
           reference_number: sale.payable.reference,
           external_id: @purchase_token,
+          metadata: { description: sale.payable.description }
         }).call
       end
     end

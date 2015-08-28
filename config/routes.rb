@@ -1,10 +1,9 @@
 ActivePayment::Engine.routes.draw do
-  default_url_options host: 'localhost:3000'
+  #payments callbacks
+  get '/paypal/success', to: 'paypal_express_checkout_callback#success'
+  get '/paypal/cancel', to: 'paypal_express_checkout_callback#cancel'
 
-  get '/paypal/success', to: ActivePayment.configuration.paypal_express_checkout_callback_controller + '#success'
-  get '/paypal/cancel', to: ActivePayment.configuration.paypal_express_checkout_callback_controller + '#cancel'
-
-  get '/paypal_adaptive/success', to: ActivePayment.configuration.paypal_adaptive_payment_callback_controller + '#success'
-  get '/paypal_adaptive/cancel', to: ActivePayment.configuration.paypal_adaptive_payment_callback_controller + '#cancel'
-  post '/paypal_adaptive/ipn', to: ActivePayment.configuration.paypal_adaptive_payment_callback_controller + '#ipn'
+  get '/paypal_adaptive/success', to: 'paypal_adaptive_payment_callback#success'
+  get '/paypal_adaptive/cancel', to: 'paypal_adaptive_payment_callback#cancel'
+  post '/paypal_adaptive/ipn', to: 'paypal_adaptive_payment_callback#ipn'
 end

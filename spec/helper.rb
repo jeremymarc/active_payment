@@ -6,6 +6,18 @@ require 'factory_girl_rails'
 
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
+class ActionView::TestCase::TestController
+  def default_url_options(options={})
+    { :host => 'localhost' }.merge(options)
+  end
+end
+
+class ActionDispatch::Routing::RouteSet
+  def default_url_options(options={})
+    { :host => 'localhost' }.merge(options)
+  end
+end
+
 RSpec.configure do |config|
   config.order = 'random'
   config.include FactoryGirl::Syntax::Methods

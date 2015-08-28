@@ -6,7 +6,6 @@ module ActivePayment
       include ActionView::Helpers
       include ActionDispatch::Routing
       include ActivePayment::Engine.routes.url_helpers
-      include Rails.application.routes.url_helpers
 
       attr_accessor :purchase_token, :sales
 
@@ -71,24 +70,15 @@ module ActivePayment
       end
 
       def return_url
-        controller = ActivePayment.configuration.paypal_adaptive_payment_callback_controller
-        url_for(controller: controller, action: :success, only_path: false)
-
-        # "http://7e2c49d1.ngrok.io/payments/paypal_adaptive/success"
+        url_for(controller: 'active_payment/paypal_adaptive_payment_callback', action: :success, only_path: false)
       end
 
       def cancel_return_url
-        controller = ActivePayment.configuration.paypal_adaptive_payment_callback_controller
-        url_for(controller: controller, action: :cancel, only_path: false)
-
-        # "http://7e2c49d1.ngrok.io/payments/paypal_adaptive/cancel"
+        url_for(controller: 'active_payment/paypal_adaptive_payment_callback', action: :cancel, only_path: false)
       end
 
       def ipn_notification_url
-        controller = ActivePayment.configuration.paypal_adaptive_payment_callback_controller
-        url_for(controller: controller, action: :ipn, only_path: false)
-
-        # "http://7e2c49d1.ngrok.io/payments/paypal_adaptive/ipn"
+        url_for(controller: 'active_payment/paypal_adaptive_payment_callback', action: :ipn, only_path: false)
       end
     end
   end
