@@ -33,6 +33,10 @@ Create a active_payment.rb file in config/initializers with your gateway informa
       config.paypal_password = ENV.fetch("PAYPAL_PASSWORD")
       config.paypal_signature = ENV.fetch("PAYPAL_SIGNATURE")
       config.paypal_appid = ENV.fetch("PAYPAL_APPID")
+      config.ip_security = true
+      config.min_amount = 1000
+      config paypal_express_checkout_callback_controller = "active_payment/paypal_express_checkout_callback"
+      config.paypal_adaptive_payment_callback_controller = "active_payment/adaptive_payment_callback"
     end
 
 And add the callbacks route to your config/routes.rb

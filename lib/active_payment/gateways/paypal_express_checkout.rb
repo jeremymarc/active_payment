@@ -5,7 +5,8 @@ module ActivePayment
     class PaypalExpressCheckout
       include ActionView::Helpers
       include ActionDispatch::Routing
-      # include Rails.application.routes.url_helpers
+      include ActivePayment::Engine.routes.url_helpers
+      include Rails.application.routes.url_helpers
 
       attr_accessor :purchase_token, :sales
 
@@ -76,14 +77,15 @@ module ActivePayment
       end
 
       def return_url
-        "http://7e2c49d1.ngrok.io/payments/paypal/success"
-
-        # url_for(controller: 'payments/paypal_express_checkout_callback', action: :success, only_path: false)
+        p main_app.inspect
+        controller = ActivePayment.configuration.paypal_express_checkout_callback_controller
+        p url_for(controller: controller, action: :success, only_path: false).inspect
+        url_for(controller: controller, action: :success, only_path: false)
       end
 
       def cancel_return_url
-        "http://7e2c49d1.ngrok.io/payments/paypal/cancel"
-        # url_for(controller: 'payments/paypal_express_checkout_callback', action: :cancel, only_path: false)
+        controller = ActivePayment.configuration.paypal_express_checkout_callback_controller
+        url_for(controller: controller, action: :cancel, only_path: false)
       end
     end
 

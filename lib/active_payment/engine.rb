@@ -11,6 +11,10 @@ module ActivePayment
       end
     end
 
+    config.to_prepare do
+      ApplicationController.helper(ActionView::Helpers::ApplicationHelper)
+    end
+
     # Force routes to be loaded if we are doing any eager load.
     config.before_eager_load { |app| app.reload_routes! }
 

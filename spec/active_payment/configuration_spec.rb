@@ -42,5 +42,22 @@ describe ActivePayment::Configuration do
     @configuration.paypal_appid = 'appid'
     expect(@configuration.paypal_appid).to eq('appid')
   end
-end
 
+  it 'set the paypal adaptive payment callback controller by default' do
+    expect(@configuration.paypal_adaptive_payment_callback_controller).to eq('active_payment/paypal_adaptive_payment_callback')
+  end
+
+  it 'set the paypal adaptive payment callback controller' do
+    @configuration.paypal_adaptive_payment_callback_controller = 'test'
+    expect(@configuration.paypal_adaptive_payment_callback_controller).to eq('test')
+  end
+
+  it 'set the paypal adaptive payment callback controller by default' do
+    expect(@configuration.paypal_express_checkout_callback_controller).to eq('active_payment/paypal_express_checkout_callback')
+  end
+
+  it 'set the paypal adaptive payment callback controller' do
+    @configuration.paypal_express_checkout_callback_controller = 'test'
+    expect(@configuration.paypal_express_checkout_callback_controller).to eq('test')
+  end
+end
