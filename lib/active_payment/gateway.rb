@@ -2,14 +2,15 @@ module ActivePayment
   class Gateway
     attr_accessor :gateway, :purchase_token
 
-    def initialize(gateway)
-      case gateway
-      when 'paypal_express_checkout'
-        @gateway = ActivePayment::Gateways::PaypalExpressCheckout.new
-      when 'paypal_adaptive_payment'
-        @gateway = ActivePayment::Gateways::PaypalAdaptivePayment.new
-      else
-        fail 'gateway not supported'
+    def initialize(name)
+      name_str = name.to_s.strip.downcase
+
+      raise(ArgumentError, 'A gateway provider must be specified') if name_str.blank?
+
+      begin
+        @gateway = ActivePayment::Gateways.const_get("#{name_str}".camelize).new
+      rescue
+        raise ArgumentError, "The specified gateway is not valid (#{name_str})"
       end
     end
 
