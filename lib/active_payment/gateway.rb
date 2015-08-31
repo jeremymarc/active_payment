@@ -9,7 +9,7 @@ module ActivePayment
 
       begin
         @gateway = ActivePayment::Gateways.const_get("#{name_str}".camelize).new
-      rescue
+      rescue SyntaxError, NameError
         raise ArgumentError, "The specified gateway is not valid (#{name_str})"
       end
     end
