@@ -17,11 +17,9 @@ module ActivePayment
         @sales = sales
 
         payables = @sales.map(&:payable)
-        destination = sales.first.payee.paypal_identifier
-
         amount = @sales.amount_in_cents.to_i
 
-        response = @gateway.setup_purchase(amount, paypal_data(payables, destination))
+        response = @gateway.setup_purchase(amount, paypal_data(payables))
         raise ActivePayment::InvalidGatewayResponseError unless response.success?
 
         @purchase_token = response.token
@@ -64,14 +62,14 @@ module ActivePayment
         }
       end
 
-      def paypal_data(payables, destination)
+      def paypal_data(payables)
         {
           items: payables.map(&:to_paypal_hash),
           return_url: return_url,
           cancel_return_url: cancel_return_url,
-          currency_code: "USD",
+          currency_code: 'USD',
           allow_note: false,
-          allow_guest_checkout: true,
+          allow_guest_checkout: true
         }
       end
 
