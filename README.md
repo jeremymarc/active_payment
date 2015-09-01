@@ -36,6 +36,7 @@ Create a active_payment.rb file in config/initializers with your gateway informa
       config.ip_security = true
       config.min_amount = 1000
       config.default_url_host = "http://example.com"
+      config.test = false
     end
 
 And add the callbacks route to your config/routes.rb

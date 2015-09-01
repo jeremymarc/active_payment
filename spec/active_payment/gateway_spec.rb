@@ -1,6 +1,12 @@
 require 'helper'
 
 describe ActivePayment::Gateway do
+  it 'set activemerchant test if configuration test is set' do
+    ActivePayment.configuration.test = true
+    expect(ActiveMerchant::Billing::Base).to receive(:mode=).with(:test)
+    gateway = ActivePayment::Gateway.new('paypal_adaptive_payment')
+  end
+
   it 'set the paypal express checkout gateway' do
     gateway = ActivePayment::Gateway.new('paypal_express_checkout')
     expect(gateway.gateway.class).to eq(ActivePayment::Gateways::PaypalExpressCheckout)

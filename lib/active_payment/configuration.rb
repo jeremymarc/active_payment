@@ -3,10 +3,12 @@ module ActivePayment
     attr_accessor :paypal_login, :paypal_password, :paypal_signature, :paypal_appid
     attr_accessor :min_amount, :ip_security
     attr_accessor :default_url_host
+    attr_accessor :test
 
     def initialize
       @min_amount = 0
       @ip_security = false
+      @test = false
     end
   end
 end

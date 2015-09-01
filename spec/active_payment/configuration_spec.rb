@@ -15,12 +15,12 @@ describe ActivePayment::Configuration do
   end
 
   it 'set the ip_security to false by default' do
-    expect(@configuration.ip_security).to eq(false)
+    expect(@configuration.ip_security).to be false
   end
 
   it 'set the ip_security' do
     @configuration.ip_security = true
-    expect(@configuration.ip_security).to eq(true)
+    expect(@configuration.ip_security).to be true
   end
 
   it 'set paypal login' do
@@ -46,5 +46,14 @@ describe ActivePayment::Configuration do
   it 'set the default host' do
     @configuration.default_url_host = 'http://example.com'
     expect(@configuration.default_url_host).to eq('http://example.com')
+  end
+
+  it 'set test as false by default' do
+    expect(@configuration.test).to be false
+  end
+
+  it 'set the test' do
+    @configuration.test = true
+    expect(@configuration.test).to be true
   end
 end

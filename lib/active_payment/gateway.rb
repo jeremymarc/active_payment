@@ -7,6 +7,8 @@ module ActivePayment
 
       raise(ArgumentError, 'A gateway provider must be specified') if name_str.blank?
 
+      ActiveMerchant::Billing::Base.mode = :test if ActivePayment.configuration.test
+
       begin
         @gateway = ActivePayment::Gateways.const_get("#{name_str}".camelize).new
       rescue SyntaxError, NameError
