@@ -44,16 +44,18 @@ describe ActivePayment::Gateway do
 
   it 'raise NoTransactionError when calling verify_purchase with invalid external_id' do
     external_id = 1
+    ip_address = '127.0.0.1'
     raw_data = {}
 
     expect {
       gateway = ActivePayment::Gateway.new('paypal_adaptive_payment')
-      gateway.verify_purchase(external_id, raw_data)
+      gateway.verify_purchase(external_id, ip_address, raw_data)
     }.to raise_error(ActivePayment::NoTransactionError)
   end
 
   it 'set the transactions to error if gateway response is wrong' do
     external_id = 1
+    ip_address = '127.0.0.1'
     raw_data = {}
     transaction = create(:transaction)
 
@@ -63,12 +65,13 @@ describe ActivePayment::Gateway do
       allow(gateway.gateway).to receive(:verify_purchase).and_return(false)
       expect(gateway).to receive(:transactions_error)
 
-      gateway.verify_purchase(external_id, raw_data)
+      gateway.verify_purchase(external_id, ip_address, raw_data)
     }.to raise_error(ActivePayment::InvalidGatewayResponseError)
   end
 
   it 'set the transactions to success if gateway response is ok' do
     external_id = 1
+    ip_address = '127.0.0.1'
     raw_data = {}
     transaction = create(:transaction)
 
@@ -77,7 +80,7 @@ describe ActivePayment::Gateway do
     allow(gateway.gateway).to receive(:verify_purchase).and_return(true)
     expect(gateway).to receive(:transactions_success)
 
-    gateway.verify_purchase(external_id, raw_data)
+    gateway.verify_purchase(external_id, ip_address, raw_data)
   end
 
   it 'call livemode? on the gateway' do

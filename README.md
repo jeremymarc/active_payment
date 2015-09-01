@@ -90,15 +90,18 @@ That's it. The engine will take care of the rest: Create a transaction, handle t
 and update the transaction once the payment is done.
 
 If you want to override the default behavior or the callback controller, simply create
-a app/controllers/active_payment/controller_name.rb:
+a app/controllers/active_payment/gateway_callback_controller.rb:
 
   ```ruby
   module ActivePayment
     class PaypalExpressCheckoutCallbackController < ActionController::Base
-      include ActivePayment::PaypalExpressCheckoutCallback
       protect_from_forgery with: :null_session
 
       def success
+        payment_gateway = ActivePayment::Gateway.new('paypal_express_checkout')
+        external_id = payment_gateway.external_id_from_request(request)
+        payment_gateway.verify_purchase(external_id, request.remote_ip, purchase_params)
+
         ... do your custom actions
       end
     end

@@ -26,6 +26,7 @@ module ActivePayment
   class InvalidItemsError < StandardError; end
   class InvalidGatewayUserError < StandardError; end
   class NoTransactionError < StandardError; end
+  class SecurityError < StandardError; end
 
   class Engine < Rails::Engine; end
 
