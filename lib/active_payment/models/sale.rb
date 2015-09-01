@@ -22,11 +22,11 @@ module ActivePayment
       end
 
       def shipping
-        payable.shipping rescue 0
+        payable.shipping || 0
       end
 
       def tax
-        payable.tax rescue 0
+        payable.tax || 0
       end
 
       def paypal_recipient
