@@ -74,11 +74,11 @@ module ActivePayment
       end
 
       def return_url
-        url_for(controller: 'active_payment/paypal_express_checkout_callback', action: :success, only_path: false)
+        url_for(controller: 'active_payment/paypal_express_checkout_callback', action: :success, only_path: false, host: ActivePayment.configuration.default_url_host)
       end
 
       def cancel_return_url
-        url_for(controller: 'active_payment/paypal_express_checkout_callback', action: :cancel, only_path: false)
+        url_for(controller: 'active_payment/paypal_express_checkout_callback', action: :cancel, only_path: false, host: ActivePayment.configuration.default_url_host)
       end
     end
 

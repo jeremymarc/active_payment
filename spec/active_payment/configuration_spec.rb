@@ -42,5 +42,9 @@ describe ActivePayment::Configuration do
     @configuration.paypal_appid = 'appid'
     expect(@configuration.paypal_appid).to eq('appid')
   end
-end
 
+  it 'set the default host' do
+    @configuration.default_url_host = 'http://example.com'
+    expect(@configuration.default_url_host).to eq('http://example.com')
+  end
+end
