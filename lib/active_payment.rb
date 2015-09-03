@@ -13,10 +13,6 @@ require 'active_payment/models/concerns/payee'
 require 'active_payment/models/concerns/payer'
 require 'active_payment/models/sale'
 require 'active_payment/models/sales'
-require 'active_payment/services/transaction_create'
-require 'active_payment/services/transaction_cancel'
-require 'active_payment/services/transaction_error'
-require 'active_payment/services/transaction_success'
 
 module ActivePayment
   attr_accessor :configuration

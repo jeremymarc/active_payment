@@ -59,13 +59,25 @@ module ActivePayment
       @gateway.livemode?
     end
 
+    def self.verify_purchase_from_request(gateway:, request:, data:)
+      payment_gateway = ActivePayment::Gateway.new(gateway)
+      external_id = payment_gateway.external_id_from_request(request)
+      payment_gateway.verify_purchase(external_id, request.remote_ip, data)
+    end
+
+    def self.cancel_purchase_from_request(gateway:, request:)
+      payment_gateway = ActivePayment::Gateway.new(gateway)
+      external_id = payment_gateway.external_id_from_request(request)
+      payment_gateway.cancel_purchase(external_id, request.remote_ip)
+    end
+
     private
 
     def create_transactions(ip_address)
       fail 'You must called setup_purchase before creating a transaction' unless @gateway.sales
 
       @gateway.sales.each do |sale|
-        ActivePayment::Services::TransactionCreate.new({
+        ActivePayment::Transaction.create({
           currency: 'USD',
           gateway: @gateway.class.to_s,
           amount: sale.amount_in_cents,
@@ -76,7 +88,7 @@ module ActivePayment
           reference_number: sale.payable.reference,
           external_id: @purchase_token,
           metadata: { description: sale.payable.description }
-        }).call
+        })
       end
     end
 
@@ -90,19 +102,20 @@ module ActivePayment
 
     def transactions_success(transactions)
       transactions.each do |transaction|
-        ActivePayment::Services::TransactionSuccess.new(transaction.id).call
+        transaction.paid_at = DateTime.now
+        transaction.completed!
       end
     end
 
     def transactions_error(transactions)
       transactions.each do |transaction|
-        ActivePayment::Services::TransactionError.new(transaction.id).call
+        transaction.error!
       end
     end
 
     def transactions_cancel(transactions)
       transactions.each do |transaction|
-        ActivePayment::Services::TransactionCancel.new(transaction.id).call
+        transaction.canceled!
       end
     end
   end

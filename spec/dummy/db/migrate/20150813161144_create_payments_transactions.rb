@@ -13,6 +13,7 @@ class CreatePaymentsTransactions < ActiveRecord::Migration
       t.integer :state
       t.text :metadata
       t.string :ip_address
+      t.datetime :paid_at, default: nil
 
       t.timestamps
     end

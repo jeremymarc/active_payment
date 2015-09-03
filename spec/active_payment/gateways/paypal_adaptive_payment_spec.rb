@@ -36,13 +36,13 @@ describe ActivePayment::Gateways::PaypalAdaptivePayment do
     @payer = Payer.new
     @payee = Payee.new
     @payable = Payable.new
-    @sale = ActivePayment::Models::Sale.new(@payable, @payer, @payee)
+    @sale = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
     @payee2 = Payee.new
     @payee2.paypal_identifier = "test2@paypal.com"
     @payee3 = Payee.new
     @payee3.paypal_identifier = "test3@paypal.com"
-    @sale2 = ActivePayment::Models::Sale.new(@payable, @payer, @payee2)
-    @sale3 = ActivePayment::Models::Sale.new(@payable, @payer, @payee3)
+    @sale2 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee2)
+    @sale3 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee3)
 
     @sales = ActivePayment::Models::Sales.new([@sale, @sale2, @sale3])
     @gateway = ActivePayment::Gateways::PaypalAdaptivePayment.new

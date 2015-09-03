@@ -35,9 +35,9 @@ describe ActivePayment::Models::Sales do
     @payer = Payer.new
     @payee = Payee.new
     @payable = Payable.new
-    @sale = ActivePayment::Models::Sale.new(@payable, @payer, @payee)
-    @sale2 = ActivePayment::Models::Sale.new(@payable, @payer, @payee)
-    @sale3 = ActivePayment::Models::Sale.new(@payable, @payer, @payee)
+    @sale = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
+    @sale2 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
+    @sale3 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
 
     @sales = ActivePayment::Models::Sales.new([@sale, @sale2, @sale3])
   end

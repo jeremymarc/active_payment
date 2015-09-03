@@ -35,7 +35,7 @@ describe ActivePayment::Models::Sale do
     @payer = Payer.new
     @payee = Payee.new
     @payable = Payable.new
-    @sale = ActivePayment::Models::Sale.new(@payable, @payer, @payee)
+    @sale = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
   end
 
   describe 'initialize' do

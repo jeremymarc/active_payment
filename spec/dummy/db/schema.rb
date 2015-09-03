@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20150813161144) do
     t.integer  "state"
     t.text     "metadata"
     t.string   "ip_address"
+    t.datetime "paid_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

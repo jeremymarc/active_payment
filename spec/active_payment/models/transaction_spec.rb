@@ -26,4 +26,6 @@ describe ActivePayment::Transaction do
   it { should allow_value('canceled').for(:state) }
   it { should allow_value('error').for(:state) }
   it { should allow_value('127.0.0.1').for(:ip_address) }
+
+  it { should allow_value(DateTime.now).for(:paid_at) }
 end

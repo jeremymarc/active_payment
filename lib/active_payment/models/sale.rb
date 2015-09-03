@@ -3,7 +3,7 @@ module ActivePayment
     class Sale
       attr_accessor :payable, :payer, :payee
 
-      def initialize(payable, payer, payee)
+      def initialize(payable:, payer:, payee:)
         @payable = payable
         @payer = payer
         @payee = payee

@@ -30,10 +30,11 @@ RSpec.describe ActivePayment::PaypalAdaptivePaymentCallbackController, type: :co
         payee_id: 1,
         payer_id: 1
       }
-      ActivePayment::Services::TransactionCreate.new(params).call
+      ActivePayment::Transaction.create(params)
 
       transaction = ActivePayment::Transaction.find_by(external_id: key)
       expect(transaction.state).to eq 'pending'
+      ActivePayment.configuration.ip_security = false
 
       expect {
         @request.env['RAW_POST_DATA'] = payload
@@ -57,7 +58,7 @@ RSpec.describe ActivePayment::PaypalAdaptivePaymentCallbackController, type: :co
         payee_id: 1,
         payer_id: 1
       }
-      ActivePayment::Services::TransactionCreate.new(params).call
+      ActivePayment::Transaction.create(params)
       allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip).and_return(params[:ip_address])
 
       transaction = ActivePayment::Transaction.find_by(external_id: key)

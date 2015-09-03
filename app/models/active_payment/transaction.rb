@@ -8,5 +8,11 @@ module ActivePayment
 
     # in cents
     validates :amount, numericality: { only_integer: true, greater_than: 0 }
+
+    after_initialize do
+      if self.new_record?
+        self.state ||= Transaction.states[:pending]
+      end
+    end
   end
 end

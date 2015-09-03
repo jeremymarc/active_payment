@@ -53,6 +53,7 @@ RSpec.describe ActivePayment::PaypalExpressCheckoutCallbackController, type: :co
 
       allow_any_instance_of(ActiveMerchant::Billing::PaypalExpressGateway).to receive(:details_for).and_return(@paypal_response)
       allow_any_instance_of(ActiveMerchant::Billing::PaypalExpressGateway).to receive(:purchase).and_return(@paypal_response)
+      allow(DateTime).to receive(:now).and_return('2015-09-03 17:21:36.356460000 +0000')
 
       get :success, token: transaction.external_id
       expect(flash[:success]).to be_present
@@ -60,6 +61,7 @@ RSpec.describe ActivePayment::PaypalExpressCheckoutCallbackController, type: :co
 
       trans = ActivePayment::Transaction.find(transaction.id)
       expect(trans.state).to eq 'completed'
+      expect(trans.paid_at).to eq '2015-09-03 17:21:36.356460000 +0000'
     end
   end
 
