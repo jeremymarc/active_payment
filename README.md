@@ -66,7 +66,7 @@ And add the callbacks route to your config/routes.rb
   payee = User.find(2)
   payable = Phone.find(1)
 
-  sale = ActivePayment::Models::Sale.new(payable, payer, payee)
+  sale = ActivePayment::Models::Sale.new(payable: payable, payer: payer, payee: payee)
   sales = ActivePayment::Models::Sales.new([sale]) #support multiple sales
   ```
 
@@ -98,11 +98,8 @@ a app/controllers/active_payment/gateway_callback_controller.rb:
       protect_from_forgery with: :null_session
 
       def success
-        payment_gateway = ActivePayment::Gateway.new('paypal_express_checkout')
-        external_id = payment_gateway.external_id_from_request(request)
-        payment_gateway.verify_purchase(external_id, request.remote_ip, purchase_params)
-
-        ... do your custom actions
+       ActivePayment::Gateway.verify_purchase_from_request(gateway: 'paypal_express_checkout', request: request, data: purchase_params)
+        ... do your custom actions ...
       end
     end
   end
