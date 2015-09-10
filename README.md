@@ -95,11 +95,14 @@ a app/controllers/active_payment/gateway_callback_controller.rb:
   ```ruby
   module ActivePayment
     class PaypalExpressCheckoutCallbackController < ActionController::Base
+      include Rails.application.routes.url_helpers
       protect_from_forgery with: :null_session
 
       def success
        ActivePayment::Gateway.verify_purchase_from_request(gateway: 'paypal_express_checkout', request: request, data: purchase_params)
         ... do your custom actions ...
+        
+        redirect_to sale_path
       end
     end
   end
