@@ -19,9 +19,9 @@ describe ActivePayment::Gateway do
 
   it 'call setup_purchase on the gateway' do
     gateway = ActivePayment::Gateway.new('paypal_adaptive_payment')
-    return_url = "http://return.url"
-    purchase_token = "token"
-    ip_address = "127.0.0.1"
+    return_url = 'http://return.url'
+    purchase_token = 'token'
+    ip_address = '127.0.0.1'
 
     expect(gateway.gateway).to receive(:setup_purchase).and_return(return_url)
     expect(gateway.gateway).to receive(:purchase_token).and_return(purchase_token)
@@ -29,11 +29,52 @@ describe ActivePayment::Gateway do
     gateway.setup_purchase(ActivePayment::Models::Sales.new, ip_address)
   end
 
+  it 'set empty transactions' do
+    gateway = ActivePayment::Gateway.new('paypal_adaptive_payment')
+    return_url = 'http://return.url'
+    purchase_token = 'token'
+    ip_address = '127.0.0.1'
+
+    expect(gateway.gateway).to receive(:setup_purchase).and_return(return_url)
+    expect(gateway.gateway).to receive(:purchase_token).and_return(purchase_token)
+    allow(gateway.gateway).to receive(:sales).and_return([])
+    gateway.setup_purchase(ActivePayment::Models::Sales.new, ip_address)
+    expect(gateway.transactions).to eq([])
+  end
+
+  it 'set correct transactions' do
+    payer = Payer.new
+    payee = Payee.new
+    payable = Payable.new
+    sale = ActivePayment::Models::Sale.new(payable: payable, payer: payer, payee: payee)
+    sales = ActivePayment::Models::Sales.new([sale])
+    gateway = ActivePayment::Gateway.new('paypal_adaptive_payment')
+    return_url = 'http://return.url'
+    purchase_token = 'token'
+    ip_address = '127.0.0.1'
+
+    expect(gateway.gateway).to receive(:setup_purchase).and_return(return_url)
+    expect(gateway.gateway).to receive(:purchase_token).and_return(purchase_token)
+    allow(gateway.gateway).to receive(:sales).and_return([sale])
+    gateway.setup_purchase(sales, ip_address)
+    expect(gateway.transactions.length).to eq(1)
+    expect(gateway.transactions.first.amount).to eq(100)
+    expect(gateway.transactions.first.payee_id).to eq(1)
+    expect(gateway.transactions.first.payer_id).to eq(2)
+    expect(gateway.transactions.first.payable_id).to eq(3)
+    expect(gateway.transactions.first.reference_number).to eq('3')
+    expect(gateway.transactions.first.payable_type).to eq('Payable')
+    expect(gateway.transactions.first.gateway).to eq('ActivePayment::Gateways::PaypalAdaptivePayment')
+    expect(gateway.transactions.first.ip_address).to eq('127.0.0.1')
+    expect(gateway.transactions.first.state).to eq('pending')
+    expect(gateway.transactions.first.metadata[:description]).to eq('description')
+  end
+
   it 'must create transactions after calling setup_purchase' do
     gateway = ActivePayment::Gateway.new('paypal_adaptive_payment')
-    return_url = "http://return.url"
-    purchase_token = "token"
-    ip_address = "127.0.0.1"
+    return_url = 'http://return.url'
+    purchase_token = 'token'
+    ip_address = '127.0.0.1'
 
     allow(gateway.gateway).to receive(:setup_purchase).and_return(return_url)
     allow(gateway.gateway).to receive(:purchase_token).and_return(purchase_token)

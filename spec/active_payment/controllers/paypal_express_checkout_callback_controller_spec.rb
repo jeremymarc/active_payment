@@ -28,7 +28,7 @@ RSpec.describe ActivePayment::PaypalExpressCheckoutCallbackController, type: :co
 
     it 'should raise exception if wrong token' do
       expect {
-        get :success, token: "invalid_token"
+        get :success, token: 'invalid_token'
       }.to raise_error(ActivePayment::NoTransactionError)
     end
 

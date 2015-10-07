@@ -8,6 +8,7 @@ class CreatePaymentsTransactions < ActiveRecord::Migration
       t.integer :payee_id
       t.integer :payer_id
       t.integer :payable_id
+      t.string :payable_type
       t.string :gateway
       t.integer :source
       t.integer :state

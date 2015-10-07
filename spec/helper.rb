@@ -18,6 +18,49 @@ class ActionDispatch::Routing::RouteSet
   end
 end
 
+class Payee
+  include ActivePayment::Models::Payee
+  attr_accessor :paypal_identifier
+
+  def id
+    1
+  end
+
+  def paypal_identifier
+    'test@paypal.com'
+  end
+end
+class Payer
+  include ActivePayment::Models::Payer
+
+  def id
+    2
+  end
+end
+class Payable
+  include ActivePayment::Models::Payable
+
+  def id
+    3
+  end
+
+  def amount
+    100
+  end
+
+  def description
+    'description'
+  end
+
+  def tax
+    10
+  end
+
+  def shipping
+    20
+  end
+end
+
 RSpec.configure do |config|
   config.order = 'random'
   config.include FactoryGirl::Syntax::Methods

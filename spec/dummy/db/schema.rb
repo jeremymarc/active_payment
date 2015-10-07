@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20150813161144) do
     t.integer  "payee_id"
     t.integer  "payer_id"
     t.integer  "payable_id"
+    t.string   "payable_type"
     t.string   "gateway"
     t.integer  "source"
     t.integer  "state"

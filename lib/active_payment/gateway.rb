@@ -1,8 +1,10 @@
 module ActivePayment
   class Gateway
-    attr_accessor :gateway, :purchase_token
+    attr_accessor :gateway, :purchase_token, :transactions
 
     def initialize(name)
+      @transactions = []
+
       name_str = name.to_s.strip.downcase
       raise(ArgumentError, 'A gateway provider must be specified') if name_str.blank?
 
@@ -27,28 +29,28 @@ module ActivePayment
     end
 
     def verify_purchase(external_id, remote_ip, raw_data)
-      transactions = ActivePayment::Transaction.where(external_id: external_id)
-      fail ActivePayment::NoTransactionError unless transactions.size > 0
-      verify_ip_address(transactions, remote_ip)
+      @transactions = ActivePayment::Transaction.where(external_id: external_id)
+      fail ActivePayment::NoTransactionError unless @transactions.size > 0
+      verify_ip_address(@transactions, remote_ip)
 
       if raw_data.is_a?(Hash) && raw_data[:amount].blank?
-        raw_data[:amount] = transactions.map(&:amount).inject(0, &:+)
+        raw_data[:amount] = @transactions.map(&:amount).inject(0, &:+)
       end
 
       if @gateway.verify_purchase(raw_data)
-        transactions_success(transactions)
+        transactions_success(@transactions)
       else
-        transactions_error(transactions)
+        transactions_error(@transactions)
         fail ActivePayment::InvalidGatewayResponseError
       end
     end
 
     def cancel_purchase(external_id, remote_ip)
-      transactions = ActivePayment::Transaction.where(external_id: external_id)
-      fail ActivePayment::NoTransactionError unless transactions.size > 0
-      verify_ip_address(transactions, remote_ip)
+      @transactions = ActivePayment::Transaction.where(external_id: external_id)
+      fail ActivePayment::NoTransactionError unless @transactions.size > 0
+      verify_ip_address(@transactions, remote_ip)
 
-      transactions_cancel(transactions)
+      transactions_cancel(@transactions)
     end
 
     def external_id_from_request(request)
@@ -77,14 +79,15 @@ module ActivePayment
       fail 'You must called setup_purchase before creating a transaction' unless @gateway.sales
 
       @gateway.sales.each do |sale|
-        ActivePayment::Transaction.create({
+        @transactions << ActivePayment::Transaction.create({
           currency: 'USD',
           gateway: @gateway.class.to_s,
           amount: sale.amount_in_cents,
           ip_address: ip_address,
           payee_id: sale.payee.id,
           payer_id: sale.payer.id,
-          payable_id: sale.payable.id,
+          payable_id: sale.payable ? sale.payable.id : nil,
+          payable_type: sale.payable ? sale.payable.class.to_s : nil,
           reference_number: sale.payable.reference,
           external_id: @purchase_token,
           metadata: { description: sale.payable.description }
