@@ -5,7 +5,7 @@ module ActivePayment
 
       included do
         if superclass == ActiveRecord::Base
-          has_many :received_transactions, foreign_key: 'payee_id', class_name: ActivePayment::Transaction
+          has_many :received_transactions, foreign_key: 'payee_id', class_name: 'ActivePayment::Transaction'
         end
       end
 
