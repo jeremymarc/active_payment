@@ -43,9 +43,9 @@ describe ActivePayment::Gateway do
   end
 
   it 'set correct transactions' do
-    payer = Payer.new
-    payee = Payee.new
-    payable = Payable.new
+    payer = PayerObj.new
+    payee = PayeeObj.new
+    payable = PayableObj.new.to_payable
     sale = ActivePayment::Models::Sale.new(payable: payable, payer: payer, payee: payee)
     sales = ActivePayment::Models::Sales.new([sale])
     gateway = ActivePayment::Gateway.new('paypal_adaptive_payment')

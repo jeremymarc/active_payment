@@ -18,7 +18,7 @@ class ActionDispatch::Routing::RouteSet
   end
 end
 
-class Payee
+class PayeeObj
   include ActivePayment::Models::Payee
   attr_accessor :paypal_identifier
 
@@ -30,16 +30,15 @@ class Payee
     'test@paypal.com'
   end
 end
-class Payer
+class PayerObj
   include ActivePayment::Models::Payer
 
   def id
     2
   end
 end
-class Payable
-  include ActivePayment::Models::Payable
 
+class PayableObj
   def id
     3
   end
@@ -58,6 +57,10 @@ class Payable
 
   def shipping
     20
+  end
+
+  def to_payable
+    ActivePayment::Models::Payable.new(amount: amount, reference: id, description: description, tax: tax, shipping: shipping)
   end
 end
 

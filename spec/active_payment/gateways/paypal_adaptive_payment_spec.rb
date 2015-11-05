@@ -2,13 +2,13 @@ require 'helper'
 
 describe ActivePayment::Gateways::PaypalAdaptivePayment do
   before(:each) do
-    @payer = Payer.new
-    @payee = Payee.new
-    @payable = Payable.new
+    @payer = PayerObj.new
+    @payee = PayeeObj.new
+    @payable = PayableObj.new.to_payable
     @sale = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
-    @payee2 = Payee.new
+    @payee2 = PayeeObj.new
     @payee2.paypal_identifier = 'test2@paypal.com'
-    @payee3 = Payee.new
+    @payee3 = PayeeObj.new
     @payee3.paypal_identifier = 'test3@paypal.com'
     @sale2 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee2)
     @sale3 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee3)
