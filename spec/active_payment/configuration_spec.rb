@@ -56,4 +56,20 @@ describe ActivePayment::Configuration do
     @configuration.test = true
     expect(@configuration.test).to be true
   end
+
+  it 'set test with a boolean value' do
+    @configuration.test = true
+    expect(@configuration.test).to be true
+
+    @configuration.test = false
+    expect(@configuration.test).to be false
+  end
+
+  it 'set test with a string value' do
+    @configuration.test = "true"
+    expect(@configuration.test).to be true
+
+    @configuration.test = "false"
+    expect(@configuration.test).to be false
+  end
 end
