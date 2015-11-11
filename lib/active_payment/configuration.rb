@@ -10,5 +10,11 @@ module ActivePayment
       @ip_security = false
       @test = false
     end
+
+    def test=(value)
+      @test = value and return if !!value == value
+
+      @test = (value == 'true' ? true : false)
+    end
   end
 end
