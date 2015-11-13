@@ -86,9 +86,9 @@ module ActivePayment
           ip_address: ip_address,
           payee_id: sale.payee.id,
           payer_id: sale.payer.id,
-          payable_id: sale.payable ? sale.payable.reference : nil,
-          payable_type: sale.payable ? sale.payable.class.to_s : nil,
-          reference_number: sale.payable.reference,
+          payable_id: sale.payable.reference ? sale.payable.reference.id : nil,
+          payable_type: sale.payable.reference ? sale.payable.reference.class.to_s : nil,
+          reference_number: sale.payable.reference_number,
           external_id: @purchase_token,
           metadata: { description: sale.payable.description }
         })

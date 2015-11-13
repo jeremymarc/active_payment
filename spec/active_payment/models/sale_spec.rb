@@ -3,8 +3,11 @@ require 'helper'
 describe ActivePayment::Models::Sale do
   before(:each) do
     @payer = PayerObj.new
-    @payee = PayeeObj.new
-    @payable = PayableObj.new.to_payable
+    # @payer = payer_obj.to_payer
+    payee_obj = PayeeObj.new
+    @payee = payee_obj.to_payee
+    payable_obj = PayableObj.new
+    @payable = payable_obj.to_payable
     @sale = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
   end
 
@@ -30,13 +33,13 @@ describe ActivePayment::Models::Sale do
 
   describe 'description' do
     it 'displays the payable description' do
-      expect(@sale.description).to eq(@payable.description)
+      expect(@sale.description).to eq(@sale.payable.description)
     end
   end
 
   describe 'shipping' do
     it 'displays the payable shipping value' do
-      expect(@sale.shipping).to eq(@payable.shipping)
+      expect(@sale.shipping).to eq(@sale.payable.shipping)
     end
   end
 
@@ -49,7 +52,7 @@ describe ActivePayment::Models::Sale do
   describe 'paypal_recipient' do
     it 'displays the paypal_recipient hash with correct values' do
       expect(@sale.paypal_recipient).to eq({
-        email: @payee.paypal_identifier,
+        email: @sale.payee.identifier,
         amount: 1,
         primary: false
       })
@@ -59,19 +62,19 @@ describe ActivePayment::Models::Sale do
   describe 'paypal_hash' do
     it 'displays the paypal_hash with correct values' do
       expect(@sale.paypal_hash).to eq({
-        description: @payable.description,
+        description: @sale.payable.description,
         invoice_data: {
           item: [{
-            name: @payable.description,
+            name: @sale.payable.description,
             item_count: 1,
             item_price: 1,
             price: 1
           }],
-          total_shipping: @payable.shipping,
-          total_tax: @payable.tax
+          total_shipping: @sale.payable.shipping,
+          total_tax: @sale.payable.tax
         },
         receiver: {
-          email: @payee.paypal_identifier
+          email: @sale.payee.identifier
         }
       })
     end

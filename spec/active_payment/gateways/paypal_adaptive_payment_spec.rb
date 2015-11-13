@@ -4,14 +4,14 @@ describe ActivePayment::Gateways::PaypalAdaptivePayment do
   before(:each) do
     @payer = PayerObj.new
     @payee = PayeeObj.new
-    @payable = PayableObj.new.to_payable
-    @sale = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
+    @payable = PayableObj.new
+    @sale = ActivePayment::Models::Sale.new(payable: @payable.to_payable, payer: @payer, payee: @payee.to_payee)
     @payee2 = PayeeObj.new
-    @payee2.paypal_identifier = 'test2@paypal.com'
+    @payee2.paypal = 'test2@paypal.com'
     @payee3 = PayeeObj.new
-    @payee3.paypal_identifier = 'test3@paypal.com'
-    @sale2 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee2)
-    @sale3 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee3)
+    @payee3.paypal = 'test3@paypal.com'
+    @sale2 = ActivePayment::Models::Sale.new(payable: @payable.to_payable, payer: @payer, payee: @payee2.to_payee)
+    @sale3 = ActivePayment::Models::Sale.new(payable: @payable.to_payable, payer: @payer, payee: @payee3.to_payee)
 
     @sales = ActivePayment::Models::Sales.new([@sale, @sale2, @sale3])
     @gateway = ActivePayment::Gateways::PaypalAdaptivePayment.new
@@ -37,7 +37,7 @@ describe ActivePayment::Gateways::PaypalAdaptivePayment do
         true
       end
       def [](request)
-        "pay_key"
+        'pay_key'
       end
     end
     @success_gateway_response = SuccessMockResponse.new

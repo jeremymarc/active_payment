@@ -63,7 +63,7 @@ describe ActivePayment::Gateway do
     expect(gateway.transactions.first.payer_id).to eq(2)
     expect(gateway.transactions.first.payable_id).to eq(3)
     expect(gateway.transactions.first.reference_number).to eq('3')
-    expect(gateway.transactions.first.payable_type).to eq('Payable')
+    expect(gateway.transactions.first.payable_type).to eq('PayableObj')
     expect(gateway.transactions.first.gateway).to eq('ActivePayment::Gateways::PaypalAdaptivePayment')
     expect(gateway.transactions.first.ip_address).to eq('127.0.0.1')
     expect(gateway.transactions.first.state).to eq('pending')
