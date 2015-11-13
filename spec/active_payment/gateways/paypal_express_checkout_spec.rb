@@ -2,47 +2,16 @@ require 'helper'
 
 describe ActivePayment::Gateways::PaypalExpressCheckout do
   before(:each) do
-    class Payee
-      include ActivePayment::Models::Payee
-      attr_accessor :paypal_identifier
-
-      def paypal_identifier
-        "test@paypal.com"
-      end
-    end
-    class Payer
-      include ActivePayment::Models::Payer
-    end
-    class Payable
-      include ActivePayment::Models::Payable
-
-      def amount
-        100
-      end
-
-      def description
-        "description"
-      end
-
-      def tax
-        10
-      end
-
-      def shipping
-        20
-      end
-    end
-
-    @payer = Payer.new
-    @payee = Payee.new
-    @payable = Payable.new
-    @sale = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
-    @payee2 = Payee.new
-    @payee2.paypal_identifier = "test2@paypal.com"
-    @payee3 = Payee.new
-    @payee3.paypal_identifier = "test3@paypal.com"
-    @sale2 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee2)
-    @sale3 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee3)
+    @payer = PayerObj.new
+    @payee = PayeeObj.new
+    @payable = PayableObj.new
+    @sale = ActivePayment::Models::Sale.new(payable: @payable.to_payable, payer: @payer, payee: @payee)
+    @payee2 = PayeeObj.new
+    @payee2.paypal = 'test2@paypal.com'
+    @payee3 = PayeeObj.new
+    @payee3.paypal = 'test3@paypal.com'
+    @sale2 = ActivePayment::Models::Sale.new(payable: @payable.to_payable, payer: @payer, payee: @payee2.to_payee)
+    @sale3 = ActivePayment::Models::Sale.new(payable: @payable.to_payable, payer: @payer, payee: @payee3.to_payee)
 
     @sales = ActivePayment::Models::Sales.new([@sale, @sale2, @sale3])
     @gateway = ActivePayment::Gateways::PaypalExpressCheckout.new

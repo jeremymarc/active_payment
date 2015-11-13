@@ -50,12 +50,25 @@ And add the callbacks route to your config/routes.rb
 
   ```ruby
   class User < ActiveRecord::Base
-    include ActivePayment::Models::Payer
-    include ActivePayment::Models::Payee
+    ...
+
+    def to_payee
+      ActivePayment::Models::Payee.new(identifier: email)
+    end
   end
 
   class Phone < ActiveRecord::Base
-    include ActivePayment::Models::Payable
+    ...
+
+    def to_payable
+      ActivePayment::Models::Payable.new(
+      reference: self,
+      amount: amount,
+      description: description,
+      reference_number: id,
+      tax: tax,
+      shipping: shipping)
+    end
   end
   ```
 
@@ -101,7 +114,7 @@ a app/controllers/active_payment/gateway_callback_controller.rb:
       def success
        ActivePayment::Gateway.verify_purchase_from_request(gateway: 'paypal_express_checkout', request: request, data: purchase_params)
         ... do your custom actions ...
-        
+
         redirect_to sale_path
       end
     end

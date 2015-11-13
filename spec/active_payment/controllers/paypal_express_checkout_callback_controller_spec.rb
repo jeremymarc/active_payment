@@ -20,7 +20,7 @@ RSpec.describe ActivePayment::PaypalExpressCheckoutCallbackController, type: :co
   describe 'success' do
     let!(:transaction) { create(:transaction) }
 
-    it 'should riase NoTransactionError if no token is passed' do
+    it 'should raise NoTransactionError if no token is passed' do
       expect {
         get :success
       }.to raise_error(ActivePayment::NoTransactionError)

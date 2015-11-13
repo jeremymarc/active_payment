@@ -7,6 +7,7 @@ FactoryGirl.define do
     payee_id 1
     payer_id 1
     payable_id 1
+    payable_type 'PayableObj'
     gateway "paypal_express_checkout"
     state "pending"
     ip_address "127.0.0.1"

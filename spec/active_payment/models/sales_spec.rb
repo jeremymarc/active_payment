@@ -2,39 +2,9 @@ require 'helper'
 
 describe ActivePayment::Models::Sales do
   before(:each) do
-    class Payee
-      include ActivePayment::Models::Payee
-
-      def paypal_identifier
-        "test@paypal.com"
-      end
-    end
-    class Payer
-      include ActivePayment::Models::Payer
-    end
-    class Payable
-      include ActivePayment::Models::Payable
-
-      def amount
-        100
-      end
-
-      def description
-        "description"
-      end
-
-      def tax
-        10
-      end
-
-      def shipping
-        20
-      end
-    end
-
-    @payer = Payer.new
-    @payee = Payee.new
-    @payable = Payable.new
+    @payer = PayerObj.new
+    @payee = PayeeObj.new
+    @payable = PayableObj.new.to_payable
     @sale = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
     @sale2 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
     @sale3 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
