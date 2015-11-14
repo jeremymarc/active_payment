@@ -46,14 +46,14 @@ And add the callbacks route to your config/routes.rb
 ## Usage
 
   A sale represent a transaction between a payer, a payee, and a payable object.
-  You simply have to add those 3 concerns to your models
+  You simply have to add the required methods to your models
 
   ```ruby
   class User < ActiveRecord::Base
     ...
 
     def to_payee
-      ActivePayment::Models::Payee.new(identifier: email)
+      ActivePayment::Models::Payee.new(id: id, paypal_identifier: email)
     end
   end
 
@@ -62,7 +62,8 @@ And add the callbacks route to your config/routes.rb
 
     def to_payable
       ActivePayment::Models::Payable.new(
-      reference: self,
+      id: id,
+      class: self.class,
       amount: amount,
       description: description,
       reference_number: id,
@@ -73,7 +74,7 @@ And add the callbacks route to your config/routes.rb
   ```
 
 
-  In your controller, create a sale:
+  In your controller, to create a sale:
   ```ruby
   payer = User.find(1)
   payee = User.find(2)
@@ -87,23 +88,29 @@ And add the callbacks route to your config/routes.rb
   And call setup_purchase:
 
   ```ruby
-  begin
-    payment_gateway = ActivePayment::Gateway.new('paypal_adaptive_payment')
-    url = payment_gateway.setup_purchase(sales, request.remote_ip)
-  rescue ActivePayment::InvalidAmountError
-    render json: 'Invalid amount' and return
-  rescue ActivePayment::InvalidGatewayResponseError
-    render json: 'Invalid Gateway response' and return
-  end
+  class SalesController < ActionController::Base
+    ...
 
-  redirect_to url
+    def new
+      begin
+        payment_gateway = ActivePayment::Gateway.new('paypal_adaptive_payment')
+        url = payment_gateway.setup_purchase(sales, request.remote_ip)
+      rescue ActivePayment::InvalidAmountError
+        render json: 'Invalid amount' and return
+      rescue ActivePayment::InvalidGatewayResponseError
+        render json: 'Invalid Gateway response' and return
+      end
+
+      redirect_to url
+    end
+  end
   ```
 
 That's it. The engine will take care of the rest: Create a transaction, handle the callback,
 and update the transaction once the payment is done.
 
-If you want to override the default behavior or the callback controller, simply create
-a app/controllers/active_payment/gateway_callback_controller.rb:
+If you want to override the default behavior of the callback controller, create a controller class 
+keeping the same library path (example: app/controllers/active_payment/paypal_express_checkout.rb):
 
   ```ruby
   module ActivePayment
