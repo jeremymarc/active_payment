@@ -1,18 +1,14 @@
 module ActivePayment
   module Models
     class Payee
-      attr_accessor :identifier, :primary
+      include ActivePayment::Models::PaypalPayee
 
-      def initialize(identifier:, primary: false)
-        @identifier = identifier
+      attr_accessor :id, :paypal_identifier, :primary
+
+      def initialize(id:, paypal_identifier:, primary: false)
+        @id = id
+        @paypal_identifier = paypal_identifier
         @primary = primary
-      end
-
-      def to_paypal_hash
-        {
-          email: @identifier,
-          primary: @primary
-        }
       end
     end
   end

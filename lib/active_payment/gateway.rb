@@ -80,14 +80,14 @@ module ActivePayment
 
       @gateway.sales.each do |sale|
         @transactions << ActivePayment::Transaction.create({
-          currency: 'USD',
+          currency: sale.payable.currency,
           gateway: @gateway.class.to_s,
           amount: sale.amount_in_cents,
           ip_address: ip_address,
           payee_id: sale.payee.id,
           payer_id: sale.payer.id,
-          payable_id: sale.payable.reference ? sale.payable.reference.id : nil,
-          payable_type: sale.payable.reference ? sale.payable.reference.class.to_s : nil,
+          payable_id: sale.payable.id,
+          payable_type: sale.payable.class.to_s,
           reference_number: sale.payable.reference_number,
           external_id: @purchase_token,
           metadata: { description: sale.payable.description }

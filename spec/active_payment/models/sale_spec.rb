@@ -52,7 +52,7 @@ describe ActivePayment::Models::Sale do
   describe 'paypal_recipient' do
     it 'displays the paypal_recipient hash with correct values' do
       expect(@sale.paypal_recipient).to eq({
-        email: @sale.payee.identifier,
+        email: @sale.payee.paypal_identifier,
         amount: 1,
         primary: false
       })
@@ -74,7 +74,7 @@ describe ActivePayment::Models::Sale do
           total_tax: @sale.payable.tax
         },
         receiver: {
-          email: @sale.payee.identifier
+          email: @sale.payee.paypal_identifier
         }
       })
     end

@@ -31,7 +31,7 @@ module ActivePayment
 
       def paypal_recipient
         {
-          email: payee.identifier,
+          email: payee.paypal_identifier,
           amount: amount,
           primary: false
         }
@@ -51,7 +51,7 @@ module ActivePayment
             total_tax: payable.tax
           },
           receiver: {
-            email: @payee.identifier
+            email: @payee.paypal_identifier
           }
         }
       end

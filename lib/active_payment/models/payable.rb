@@ -1,26 +1,21 @@
 module ActivePayment
   module Models
     class Payable
-      attr_accessor :description, :amount, :reference,
-                    :reference_number, :external_id, :shipping, :tax,
-                    :number, :quantity
+      include ActivePayment::Models::PaypalPayable
+
+      attr_accessor :id, :class, :description, :amount,
+                    :reference_number, :external_id,
+                    :shipping, :tax, :number, :quantity,
+                    :currency
 
       def initialize(params = {})
         @tax = 0
         @shipping = 0
         @number = 1
         @quantity = 1
+        @currency = 'USD'
 
         params.each { |key, value| send "#{key}=", value }
-      end
-
-      def to_paypal_hash
-        {
-          name: @description,
-          amount: @amount.to_i,
-          number: @number.to_i,
-          quantity: @quantity.to_i
-        }
       end
     end
   end

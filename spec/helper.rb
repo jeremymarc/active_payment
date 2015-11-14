@@ -30,7 +30,7 @@ class PayeeObj
   end
 
   def to_payee
-    ActivePayment::Models::Payee.new(identifier: paypal)
+    ActivePayment::Models::Payee.new(id: id, paypal_identifier: paypal)
   end
 end
 class PayerObj
@@ -62,9 +62,13 @@ class PayableObj
 
   def to_payable
     ActivePayment::Models::Payable.new(
-      amount: amount, reference: self,
-      description: description, reference_number: id,
-      tax: tax, shipping: shipping)
+      id: id,
+      class: self.class,
+      amount: amount,
+      description: description,
+      reference_number: id,
+      tax: tax,
+      shipping: shipping)
   end
 end
 
