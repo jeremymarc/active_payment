@@ -18,7 +18,15 @@ require 'active_payment/models/payable'
 module ActivePayment
   attr_accessor :configuration
 
-  class InvalidGatewayResponseError < StandardError; end
+  class StandardResponseError < StandardError
+    attr_accessor :response
+
+    def initialize(response = nil)
+      @response = response
+    end
+  end
+
+  class InvalidGatewayResponseError < StandardResponseError; end
   class InvalidAmountError < StandardError; end
   class InvalidItemsError < StandardError; end
   class InvalidGatewayUserError < StandardError; end

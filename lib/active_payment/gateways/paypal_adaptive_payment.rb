@@ -17,7 +17,7 @@ module ActivePayment
         @sales = sales
 
         response = @gateway.setup_purchase(purchase_data(sales))
-        raise ActivePayment::InvalidGatewayResponseError unless response.success?
+        raise ActivePayment::InvalidGatewayResponseError.new(response) unless response.success?
 
         @purchase_token = response['payKey']
         @gateway.set_payment_options(payment_options_data(@purchase_token, @sales))
