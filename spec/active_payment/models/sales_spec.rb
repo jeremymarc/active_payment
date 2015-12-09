@@ -3,7 +3,7 @@ require 'helper'
 describe ActivePayment::Models::Sales do
   before(:each) do
     @payer = PayerObj.new
-    @payee = PayeeObj.new
+    @payee = PayeeObj.new.to_payee
     @payable = PayableObj.new.to_payable
     @sale = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
     @sale2 = ActivePayment::Models::Sale.new(payable: @payable, payer: @payer, payee: @payee)
@@ -48,16 +48,18 @@ describe ActivePayment::Models::Sales do
 
   describe 'paypal_hash' do
     it 'display an array of sale paypal_hash' do
-    end
-  end
-
-  describe 'each' do
-    it 'behave as expected' do
+      expect(@sales.paypal_hash).to eq([{:description=>"description", :invoice_data=>{:item=>[{:name=>"description", :item_count=>1, :item_price=>1.0, :price=>1.0}], :total_shipping=>20, :total_tax=>10}, :receiver=>{:email=>"activepayment@paypal.com"}}, {:description=>"description", :invoice_data=>{:item=>[{:name=>"description", :item_count=>1, :item_price=>1.0, :price=>1.0}], :total_shipping=>20, :total_tax=>10}, :receiver=>{:email=>"activepayment@paypal.com"}}, {:description=>"description", :invoice_data=>{:item=>[{:name=>"description", :item_count=>1, :item_price=>1.0, :price=>1.0}], :total_shipping=>20, :total_tax=>10}, :receiver=>{:email=>"activepayment@paypal.com"}}])
     end
   end
 
   describe 'paypal_recipients' do
     it 'display an array of sale paypal_recipient' do
+      expect(@sales.paypal_recipients).to eq([{:email=>"activepayment@paypal.com", :amount=>1.0, :primary=>false}, {:email=>"activepayment@paypal.com", :amount=>1.0, :primary=>false}, {:email=>"activepayment@paypal.com", :amount=>1.0, :primary=>false}])
+    end
+
+    it 'display only recipient with amount > 0' do
+      ActivePayment::Models::Sale.any_instance.stub(:amount).and_return(0)
+      expect(@sales.paypal_recipients).to eq([])
     end
   end
 end

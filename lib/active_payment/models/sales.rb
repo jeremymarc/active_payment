@@ -55,7 +55,7 @@ module ActivePayment
       def paypal_recipients
         recipients = []
         @sales.each do |sale|
-          recipients << sale.paypal_recipient
+          recipients << sale.paypal_recipient if sale.amount > 0
         end
 
         recipients
