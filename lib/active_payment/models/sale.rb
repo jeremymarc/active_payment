@@ -29,6 +29,10 @@ module ActivePayment
         payable.tax || 0
       end
 
+      def currency
+        payable.currency || 'USD'
+      end
+
       def paypal_recipient
         {
           email: payee.paypal_identifier,

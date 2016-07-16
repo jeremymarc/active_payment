@@ -59,6 +59,7 @@ module ActivePayment
           cancel_url: cancel_return_url,
           ipn_notification_url: ipn_notification_url,
           receiver_list: sales.paypal_recipients,
+          currency_code: sales.currency
         }
       end
 

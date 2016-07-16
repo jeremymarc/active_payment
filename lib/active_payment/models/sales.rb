@@ -27,6 +27,10 @@ module ActivePayment
         total_shipping
       end
 
+      def currency
+        @sales.first.currency
+      end
+
       def total_tax
         total_tax = 0
 

@@ -67,7 +67,7 @@ module ActivePayment
           items: payables.map(&:to_paypal_hash),
           return_url: return_url,
           cancel_return_url: cancel_return_url,
-          currency_code: 'USD',
+          currency: @sales.currency,
           allow_note: false,
           allow_guest_checkout: true
         }
